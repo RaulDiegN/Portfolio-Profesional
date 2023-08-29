@@ -69,3 +69,36 @@ LEFT JOIN
 ON a.student_id = c.student_id AND b.subject_name = c.subject_name
 ORDER BY  a.student_id, b.subject_name;
 
+-- Write a solution to find managers with at least five direct reports.
+
+SELECT a.name
+FROM Employee a
+LEFT JOIN (
+  SELECT a.managerId, COUNT(*)
+  FROM Employee a
+  LEFT JOIN Employee b
+  ON a.managerId = b.id
+  GROUP BY a.managerId
+  HAVING COUNT(*) >= 5
+  ) b
+ON a.id = b.managerId
+WHERE b.managerId is not null;
+
+-- Write an SQL query to find the confirmation rate of each user
+
+SELECT DISTINCT a.user_id, ROUND(IFNULL(confirmed/total, 0),2) confirmation_rate
+FROM Signups a
+LEFT JOIN (
+  SELECT user_id, COUNT(*) confirmed
+  FROM Confirmations
+  WHERE action = 'confirmed'
+  GROUP BY user_id
+) b
+ON a.user_id = b.user_id
+LEFT JOIN (
+  SELECT user_id, COUNT(*) total
+  FROM Confirmations
+  GROUP BY user_id
+) c
+ON a.user_id = c.user_id
+ORDER BY confirmation_rate;
