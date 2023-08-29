@@ -44,3 +44,28 @@ ON a.machine_id = b.machine_id AND a.process_id = b.process_id
 WHERE a.activity_type = 'start' AND b.activity_type='end'
 GROUP BY a.machine_id;
 
+-- Write an SQL query to report the name and bonus amount of each employee with a bonus less than 1000
+
+SELECT name, bonus
+FROM Employee a
+LEFT JOIN Bonus b
+ON a.empId = b.empId
+WHERE bonus < 1000 OR bonus is null
+
+
+-- Write a solution to find the number of times each student attended each exam.
+
+SELECT a.student_id, a.student_name, b.subject_name, IFNULL(c.attended_exams, 0) attended_exams
+FROM Students a
+CROSS JOIN Subjects b
+LEFT JOIN 
+  (SELECT a.student_id, a.student_name, c.subject_name, COUNT(*) attended_exams
+  FROM Students a
+  LEFT JOIN Examinations b
+  ON a.student_id = b.student_id
+  LEFT JOIN Subjects c
+  ON b.subject_name = c.subject_name
+  GROUP BY  a.student_id, a.student_name,c.subject_name) c
+ON a.student_id = c.student_id AND b.subject_name = c.subject_name
+ORDER BY  a.student_id, b.subject_name;
+
