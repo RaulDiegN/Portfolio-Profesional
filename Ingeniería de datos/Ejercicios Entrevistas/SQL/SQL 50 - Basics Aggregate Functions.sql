@@ -54,3 +54,23 @@ LEFT JOIN (
 ON a.query_name = b.query_name
 GROUP BY a.query_name;
 
+
+-- Write an SQL query to find for each month and country, the number of transactions 
+-- and their total amount, the number of approved transactions and their total amount.
+SELECT  DATE_FORMAT(trans_date, '%Y-%m') as month, country, COUNT(id) as trans_count, 
+SUM(CASE WHEN state = 'approved' then 1 else 0 END) as approved_count, SUM(amount) as trans_total_amount, 
+SUM(CASE WHEN state = 'approved' then amount else 0 END) as approved_total_amount
+FROM Transactions
+GROUP BY month, country
+
+-- Write a solution to find the percentage of immediate orders in the first orders of all customers, 
+-- rounded to 2 decimal places.
+
+SELECT (COUNT(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE NULL END) / COUNT(delivery_id))*100 AS immediate_percentage
+FROM Delivery;
+
+-- Write a solution to report the fraction of players that logged in again on the day after 
+-- the day they first logged in, rounded to 2 decimal places. In other words, you need to count 
+-- the number of players that logged in for at least two consecutive days starting from their first 
+-- login date, then divide that number by the total number of players.
+
