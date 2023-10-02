@@ -45,7 +45,7 @@ FROM (
     FROM MyNumbers
     GROUP BY num
     HAVING COUNT(num) = 1
-) AS unique_numbers
+) AS unique_numbers;
 
 
 -- Write a solution to report the customer ids from the Customer table that bought 
@@ -54,4 +54,4 @@ FROM (
 SELECT customer_id
 FROM customer
 GROUP BY customer_id
-HAVING COUNT(Distinct product_key) = (SELECT COUNT( Distinct product_key) FROM Product)
+HAVING COUNT(Distinct product_key) = (SELECT COUNT( Distinct product_key) FROM Product);
