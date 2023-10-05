@@ -53,3 +53,50 @@ UNION
 SELECT product_id, 10 AS price
 FROM Products
 WHERE product_id NOT IN (SELECT product_id FROM cte);
+
+-- Write a solution to find the person_name of the last person that can fit on the bus without 
+-- exceeding the weight limit. The test cases are generated such that the first person does not 
+-- exceed the weight limit.
+
+WITH CTE AS (
+    SELECT 
+        turn, person_name, weight,
+        SUM(weight) OVER(ORDER BY turn ASC) AS tot_weight 
+    FROM Queue
+    ORDER BY turn
+)
+
+SELECT person_name
+FROM CTE
+WHERE tot_weight <= 1000
+ORDER BY tot_weight DESC
+LIMIT 1;
+
+-- Write a solution to calculate the number of bank accounts for each salary category. 
+-- The salary categories are:
+
+/*
+  . "Low Salary": All the salaries strictly less than $20000.
+  - "Average Salary": All the salaries in the inclusive range [$20000, $50000].
+  - "High Salary": All the salaries strictly greater than $50000.
+
+The result table must contain all three categories. If there are no accounts in a category, return 0. */
+
+SELECT "Low Salary" category, COUNT(*) accounts_count
+FROM Accounts
+WHERE income < 20000
+
+UNION
+
+SELECT "Average Salary" category, COUNT(*) accounts_count
+FROM Accounts
+WHERE income >= 20000 AND income <= 50000
+
+UNION
+
+SELECT "High Salary" category, COUNT(*) accounts_count
+FROM Accounts
+WHERE income > 50000;
+
+
+
